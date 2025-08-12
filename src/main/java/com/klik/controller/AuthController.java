@@ -28,7 +28,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
         return korisnikService.authenticate(request.getEmail(), request.getLozinka())
-                .map(k -> ResponseEntity.ok(new AuthResponse(jwtUtil.generateToken(k.getEmail(),k.getUloga().name()))))
+                .map(k -> ResponseEntity.ok(new AuthResponse(jwtUtil.generateToken(k.getKorisnikId(),k.getEmail(),k.getUloga().name()))))
                 .orElse(ResponseEntity.status(401).build());
     }
 }

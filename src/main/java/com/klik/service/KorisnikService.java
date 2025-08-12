@@ -7,6 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,5 +30,13 @@ public class KorisnikService {
     public Optional<Korisnik> authenticate(String email, String rawPassword) {
         return korisnikRepository.findByEmail(email)
                 .filter(k -> encoder.matches(rawPassword, k.getLozinka()));
+    }
+
+    public List<Korisnik> getAll() {
+        return korisnikRepository.findAll();
+    }
+
+    public void delete(Integer id) {
+        korisnikRepository.deleteById(id);
     }
 }

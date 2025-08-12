@@ -14,12 +14,13 @@ public class JwtUtil {
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     private final long expirationMs = 1000 * 60 * 60;
 
-    public String generateToken(final String email, final String uloga) {
+    public String generateToken(final Integer id, final String email, final String uloga) {
         return Jwts.builder()
                 .setSubject(email)
+                .claim("id", id)
                 .claim("uloga", uloga)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() * expirationMs))
+                .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
                 .signWith(key)
                 .compact();
     }

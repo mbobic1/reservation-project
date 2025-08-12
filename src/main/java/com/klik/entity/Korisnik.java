@@ -2,11 +2,16 @@ package com.klik.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import com.klik.entity.Uloga;
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "korisnici")
-public class Korisnik {
+public class Korisnik implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -77,5 +82,45 @@ public class Korisnik {
 
     public void setKreirano(LocalDateTime kreirano) {
         this.kreirano = kreirano;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // Return a list with a single role. The role must be prefixed with "ROLE_".
+        return List.of(new SimpleGrantedAuthority("ROLE_" + uloga.name().toUpperCase()));
+    }
+
+    @Override
+    public String getPassword() {
+        return lozinka;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        // For simplicity, we return true. You can add logic for account expiration if needed.
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        // For simplicity, we return true. You can add logic for account locking if needed.
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        // For simplicity, we return true. You can add logic for password expiration if needed.
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        // For simplicity, we return true. You can add logic for disabling accounts if needed.
+        return true;
     }
 }
